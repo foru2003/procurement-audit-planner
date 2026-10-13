@@ -1,0 +1,123 @@
+{
+  "files": [
+    {
+      "file": "Over500_2026_P02_-_published.xlsx",
+      "header_row_0based": 0,
+      "rows": 2892
+    },
+    {
+      "file": "Over500_2026_P03_-_published.xlsx",
+      "header_row_0based": 1,
+      "rows": 3547
+    },
+    {
+      "file": "Over500_2026_P04_-_published.xlsx",
+      "header_row_0based": 1,
+      "rows": 4168
+    }
+  ],
+  "rows_raw": 10607,
+  "date_type_counts": {
+    "Timestamp": 10607
+  },
+  "rows_identical_in_all_six_columns": 2710,
+  "rows_identical_beyond_first": 2033,
+  "identical_rows_across_files_groups": 0,
+  "file_date_ranges": {
+    "Over500_2026_P02_-_published.xlsx": [
+      "2026-05-01",
+      "2026-06-04"
+    ],
+    "Over500_2026_P03_-_published.xlsx": [
+      "2026-06-01",
+      "2026-06-30"
+    ],
+    "Over500_2026_P04_-_published.xlsx": [
+      "2026-07-01",
+      "2026-07-31"
+    ]
+  },
+  "overlapping_consecutive_workbooks": [
+    [
+      "Over500_2026_P02_-_published.xlsx",
+      "Over500_2026_P03_-_published.xlsx"
+    ]
+  ],
+  "months_covered": 3,
+  "date_min": "2026-05-01",
+  "date_max": "2026-07-31",
+  "min_amount": 500.21,
+  "exclusions": {
+    "redacted_supplier": {
+      "rows": 2015,
+      "gbp": 2746746.71,
+      "reason": "Supplier is the label 'Redacted': many payees under one label, unusable for supplier-level tests"
+    },
+    "pension_statutory": {
+      "rows": 12,
+      "gbp": 9235814.93,
+      "reason": "Narrative matches LGPS|PENSION|SUPERANNUATION: statutory pension contributions"
+    },
+    "inter_authority": {
+      "rows": 46,
+      "gbp": 1666587.84,
+      "reason": "Supplier is another public body (council/NHS/police/fire/HMRC/department) or narrative is joint arrangements, and not Private Contractors"
+    },
+    "non_procurement_accounting": {
+      "rows": 7,
+      "gbp": 13805.14,
+      "reason": "Expenditure category null, or Narrative ASC Deferred Debt / Rent Rebates: control accounts and benefit rebates, not purchases"
+    }
+  },
+  "non_procurement_accounting_narratives": {
+    "Court Order Control": 4,
+    "Prudential AVC Teachers": 3
+  },
+  "tag_regexes": {
+    "care_or_education_placement": "Service ^(Adult Social Care|Children['\u2019]s Social Care|Education) AND Narrative in ['Adult Placement Allowances', 'Allowances for provision care', 'Direct Payment', 'Other agencies', 'Private Contractors', 'Voluntary Associations']",
+    "grant": "GRANT",
+    "agency_staff": "AGENCY",
+    "premises_non_procurement": "RENT|RATES|WATER RATES|LEASE"
+  },
+  "tag_counts": {
+    "care_or_education_placement": 5885,
+    "general_procurement": 2073,
+    "grant": 339,
+    "premises_non_procurement": 206,
+    "agency_staff": 24
+  },
+  "rows_kept": 8527,
+  "contracts_present": true,
+  "register_present": false,
+  "contracts_rows_in_file": 150,
+  "contracts_rows_dropped": 9,
+  "contracts_orgs_kept": {
+    "West Berkshire Council": 115,
+    "West Berkshire": 20,
+    "WEST BERKSHIRE COUNCIL": 6
+  },
+  "contracts_rows_for_council": 141,
+  "notices": 141,
+  "notice_supplier_pairs": 210,
+  "distinct_normalised_suppliers": 142,
+  "pairs_active": 130,
+  "pairs_ended_before_window": 79,
+  "pairs_starting_after_window_ignored": 1,
+  "notices_missing_start_or_end": 0,
+  "zero_value_awards": 7,
+  "rows_per_publication_year": {
+    "2021": 7,
+    "2022": 10,
+    "2023": 39,
+    "2024": 52,
+    "2025": 28,
+    "2026": 5
+  },
+  "published_range": [
+    "2021-02-23",
+    "2026-09-09"
+  ],
+  "contracts_warnings": [
+    "implausibly thin years: 2022"
+  ]
+}

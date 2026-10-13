@@ -1,0 +1,23 @@
+test,item,group,row_id,source_file,sheet_row,pay_date,supplier,amount,service,narrative
+T-02.3,1,READING REFUGEE SUPPORT GROUP,Over500_2026_P03_-_published.xlsx:2127,Over500_2026_P03_-_published.xlsx,2127,2026-06-16,Reading Refugee Support Group,1198.35,Development & Housing,Private Contractors
+T-02.3,1,READING REFUGEE SUPPORT GROUP,Over500_2026_P03_-_published.xlsx:3077,Over500_2026_P03_-_published.xlsx,3077,2026-06-16,Reading Refugee Support Group,1198.35,Development & Housing,Private Contractors
+T-02.3,1,READING REFUGEE SUPPORT GROUP,Over500_2026_P03_-_published.xlsx:2114,Over500_2026_P03_-_published.xlsx,2114,2026-06-12,Reading Refugee Support Group,743.09,Development & Housing,Private Contractors
+T-02.3,1,READING REFUGEE SUPPORT GROUP,Over500_2026_P03_-_published.xlsx:3078,Over500_2026_P03_-_published.xlsx,3078,2026-06-17,Reading Refugee Support Group,743.09,Development & Housing,Private Contractors
+T-02.3,1,READING REFUGEE SUPPORT GROUP,Over500_2026_P03_-_published.xlsx:2128,Over500_2026_P03_-_published.xlsx,2128,2026-06-16,Reading Refugee Support Group,599.18,Development & Housing,Private Contractors
+T-02.3,2,EDINGTON SPINK AND HYNE,Over500_2026_P02_-_published.xlsx:764,Over500_2026_P02_-_published.xlsx,764,2026-05-27,EDINGTON SPINK & HYNE LIMITED,4870.0,Education & SEND,Survey
+T-02.3,2,EDINGTON SPINK AND HYNE,Over500_2026_P03_-_published.xlsx:748,Over500_2026_P03_-_published.xlsx,748,2026-06-18,EDINGTON SPINK & HYNE LIMITED,1500.0,Education & SEND,Survey
+T-02.3,3,NAGELS,Over500_2026_P03_-_published.xlsx:3082,Over500_2026_P03_-_published.xlsx,3082,2026-06-09,Nagels (UK) Ltd,6385.0,Environment,Private Contractors
+T-02.3,4,DOWNLAND VOLUNTEER GROUP,Over500_2026_P04_-_published.xlsx:1562,Over500_2026_P04_-_published.xlsx,1562,2026-07-30,DOWNLAND VOLUNTEER GROUP,6387.2,Environment,Voluntary Associations
+T-02.3,5,SSE POWER DISTRIBUTION,Over500_2026_P02_-_published.xlsx:737,Over500_2026_P02_-_published.xlsx,737,2026-05-01,SSE POWER DISTRIBUTION LIMITED,6441.47,Environment,Payment to contractor
+T-02.3,6,RYGOR COMMERCIALS,Over500_2026_P03_-_published.xlsx:153,Over500_2026_P03_-_published.xlsx,153,2026-06-11,Rygor Commercials Ltd,2486.72,Environment,Direct Transport Costs
+T-02.3,6,RYGOR COMMERCIALS,Over500_2026_P04_-_published.xlsx:415,Over500_2026_P04_-_published.xlsx,415,2026-07-31,Rygor Commercials Ltd,1785.06,Environment,Direct Transport Costs
+T-02.3,6,RYGOR COMMERCIALS,Over500_2026_P04_-_published.xlsx:242,Over500_2026_P04_-_published.xlsx,242,2026-07-15,Rygor Commercials Ltd,990.06,Environment,Direct Transport Costs
+T-02.3,6,RYGOR COMMERCIALS,Over500_2026_P03_-_published.xlsx:150,Over500_2026_P03_-_published.xlsx,150,2026-06-11,Rygor Commercials Ltd,648.94,Environment,Direct Transport Costs
+T-02.3,6,RYGOR COMMERCIALS,Over500_2026_P03_-_published.xlsx:149,Over500_2026_P03_-_published.xlsx,149,2026-06-11,Rygor Commercials Ltd,634.36,Environment,Direct Transport Costs
+T-02.3,7,R AND G SMITH,Over500_2026_P03_-_published.xlsx:39,Over500_2026_P03_-_published.xlsx,39,2026-06-05,R & G SMITH (SOUTHERN) LTD,4000.0,Community Services,Corporate R&M
+T-02.3,7,R AND G SMITH,Over500_2026_P02_-_published.xlsx:29,Over500_2026_P02_-_published.xlsx,29,2026-05-26,R & G SMITH (SOUTHERN) LTD,2565.0,Community Services,Corporate R&M
+T-02.3,8,INTELLIDENT,Over500_2026_P02_-_published.xlsx:461,Over500_2026_P02_-_published.xlsx,461,2026-05-07,Intellident Ltd t/a Bibliotheca,6571.0,Community Services,IT
+T-02.3,9,RAIL SETTLEMENT,Over500_2026_P04_-_published.xlsx:351,Over500_2026_P04_-_published.xlsx,351,2026-07-21,Rail Settlement,3437.0,Children's Social Care,Public Transport
+T-02.3,9,RAIL SETTLEMENT,Over500_2026_P03_-_published.xlsx:272,Over500_2026_P03_-_published.xlsx,272,2026-06-23,Rail Settlement,3170.0,Children's Social Care,Public Transport
+T-02.3,10,ACCESS,Over500_2026_P03_-_published.xlsx:400,Over500_2026_P03_-_published.xlsx,400,2026-06-30,ACCESS UK LIMITED,5700.0,Adult Social Care - Transformation Projects,IT
+T-02.3,10,ACCESS,Over500_2026_P04_-_published.xlsx:1016,Over500_2026_P04_-_published.xlsx,1016,2026-07-31,ACCESS UK LIMITED,950.0,Adult Social Care - Transformation Projects,Professional Fees

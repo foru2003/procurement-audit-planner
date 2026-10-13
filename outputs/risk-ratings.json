@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "generated_on": "2026-10-13",
+  "risks": [
+    {
+      "id": "R-01",
+      "theme": "T01",
+      "statement": "Payments to one supplier inside a {{$.tests.split_purchases.parameters.window_days}}-day window that together reach {{$.quote_threshold|gbp0}}, each below it, and payments just under that threshold are indicators to test for splitting: {{$.tests.split_purchases.per_threshold[0].headline_general_procurement.count}} windows and {{$.tests.threshold_clustering.per_threshold[2].by_tag.general_procurement.count}} near-threshold payments in general procurement.",
+      "likelihood": {
+        "score": 4,
+        "signal": "headline_corroborated",
+        "signal_metrics": [
+          "$.tests.split_purchases.per_threshold[0].headline_general_procurement.count",
+          "$.tests.threshold_clustering.per_threshold[2].by_tag.general_procurement.count"
+        ],
+        "justification": "Signal headline_corroborated: two tests show the indicator in the general procurement headline, [metric:$.tests.split_purchases.per_threshold[0].headline_general_procurement.count] windows and [metric:$.tests.threshold_clustering.per_threshold[2].by_tag.general_procurement.count] payments just under the threshold; rule [rule:CPR-14] bars artificial splitting."
+      },
+      "impact": {
+        "score": 3,
+        "justification": "Medium on the council's scale [history:IS-03] (compliance): the quote steps of [rule:CPR-54] could be bypassed for the flagged windows, which together reach [metric:$.tests.split_purchases.per_threshold[0].headline_general_procurement.gbp]; the windows total payments, not a loss, so the lower level is taken."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend testing the flagged windows against the written quotes held for each supplier, largest window first.",
+      "sample_source": "outputs/analytics-full/split-purchases.csv"
+    },
+    {
+      "id": "R-02",
+      "theme": "T02",
+      "statement": "{{$.tests.off_contract.groups.unmatched.by_tag.general_procurement.count}} general procurement suppliers at or above the {{$.quote_threshold|gbp0}} quote threshold show no active notice found in the published-notice export; this is a lead to check against the council's contract register.",
+      "likelihood": {
+        "score": 3,
+        "signal": "headline_single",
+        "signal_metrics": [
+          "$.tests.off_contract.groups.unmatched.by_tag.general_procurement.count"
+        ],
+        "justification": "Signal headline_single: one test, off_contract, shows the indicator in the headline, [metric:$.tests.off_contract.groups.unmatched.by_tag.general_procurement.count] suppliers with no active notice found; the population list [metric:$.tests.high_value_suppliers.headline_general_procurement.count] is context only, and the notice export is not a register so this is a lead, rule [rule:CPR-54]."
+      },
+      "impact": {
+        "score": 3,
+        "justification": "Medium on the council's scale [history:IS-03] (compliance): the Appendix B competition steps [rule:CPR-54] are not evidenced in the data for these suppliers; the notice export is incomplete by design (see [metric:$.contracts.register_present]), so the lower level is taken."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend checking the largest unmatched suppliers against the council's contract register and the quote or tender file before any further testing.",
+      "sample_source": "outputs/analytics-full/off-contract.csv"
+    },
+    {
+      "id": "R-03",
+      "theme": "T03",
+      "statement": "{{$.tests.expired_notice_spend.headline_general_procurement.count}} general procurement suppliers were paid in the window with every matching notice ended before it, and {{$.tests.spend_vs_award.headline_general_procurement.count}} show annualised spend at or above the flagged multiple of the notice award rate; a newer contract may exist with no notice.",
+      "likelihood": {
+        "score": 4,
+        "signal": "headline_corroborated",
+        "signal_metrics": [
+          "$.tests.expired_notice_spend.headline_general_procurement.count",
+          "$.tests.spend_vs_award.headline_general_procurement.count"
+        ],
+        "justification": "Signal headline_corroborated: two tests show the indicator in the headline, [metric:$.tests.expired_notice_spend.headline_general_procurement.count] suppliers after notice end and [metric:$.tests.spend_vs_award.headline_general_procurement.count] above the award rate; rules [rule:CPR-61] and [rule:CPR-62] set the approvals for extensions and variations."
+      },
+      "impact": {
+        "score": 3,
+        "justification": "Medium on the council's scale [history:IS-03] (compliance): extension and variation approvals [rule:CPR-61] [rule:CPR-62] are not observable here; the annualised estimate of [metric:$.tests.spend_vs_award.headline_general_procurement.annualised_estimate_gbp] is an estimate and award values may be maxima, so the lower level is taken."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend asking for the contract file, extension approval and variation record for the flagged suppliers, largest first.",
+      "sample_source": null
+    },
+    {
+      "id": "R-04",
+      "theme": "T04",
+      "statement": "{{$.tests.duplicates.tiers.different_time.headline_general_procurement.groups}} groups of general procurement payments with the same supplier and amount at different times are an indicator to test for duplicate payment.",
+      "likelihood": {
+        "score": 3,
+        "signal": "headline_single",
+        "signal_metrics": [
+          "$.tests.duplicates.tiers.different_time.headline_general_procurement.groups"
+        ],
+        "justification": "Signal headline_single: one test, duplicates, shows the indicator in the headline; the higher-signal different-time tier has [metric:$.tests.duplicates.tiers.different_time.headline_general_procurement.groups] groups, set against the payment-timing clause [rule:CPR-39]. The prior accounts payable audit [history:AO-11] has a Reasonable Assurance opinion, so no repeat uplift applies."
+      },
+      "impact": {
+        "score": 3,
+        "justification": "Medium on the council's scale [history:IS-03] (financial): the amount beyond the first payment in these groups is [metric:$.tests.duplicates.tiers.different_time.headline_general_procurement.gbp_beyond_first]; repeated rows can be legitimate recurring charges."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend testing the different-time groups against invoices and remittances, largest value first.",
+      "sample_source": null
+    },
+    {
+      "id": "R-05",
+      "theme": "T05",
+      "statement": "Exceptions to and waivers of competition cannot be observed in the payments data, so the control is not tested by any analytic.",
+      "likelihood": {
+        "score": 2,
+        "signal": "unobservable",
+        "signal_metrics": [],
+        "justification": "Signal unobservable: the payments data cannot show waivers; rules [rule:CPR-20] and [rule:CPR-26] require them to be limited to listed circumstances and fully documented."
+      },
+      "impact": {
+        "score": 2,
+        "justification": "Minor on the council's scale [history:IS-04] (compliance): no flagged amount ties to waivers, so the impact cannot be shown above the lower level; see [rule:CPR-26]."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend requesting the register of exceptions and waivers and testing a sample for the documentation the rules require.",
+      "sample_source": null
+    },
+    {
+      "id": "R-06",
+      "theme": "T06",
+      "statement": "Completeness of the contract register and of tender and award publication cannot be confirmed from the data: only a notice export is held, with no register present.",
+      "likelihood": {
+        "score": 2,
+        "signal": "unobservable",
+        "signal_metrics": [],
+        "justification": "Signal unobservable: register completeness cannot be seen in the payments data; rules [rule:CPR-35] and [rule:CPR-07] require award recording and publication, and context [metric:$.contracts.register_present] shows no register was supplied."
+      },
+      "impact": {
+        "score": 2,
+        "justification": "Minor on the council's scale [history:IS-04] (compliance): an incomplete register weakens other checks but no loss is shown; see [rule:CPR-35]."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend obtaining the council's contract register and comparing it with the notice export.",
+      "sample_source": null
+    },
+    {
+      "id": "R-07",
+      "theme": "T07",
+      "statement": "Care and education placement payments show repeated payments to one supplier in a window and same-amount groups at different times, outside the general procurement headline: {{$.tests.split_purchases.per_threshold[0].by_tag.care_or_education_placement.count}} windows and {{$.tests.duplicates.tiers.different_time.by_tag.care_or_education_placement.groups}} groups.",
+      "likelihood": {
+        "score": 2,
+        "signal": "outside_headline",
+        "signal_metrics": [
+          "$.tests.split_purchases.per_threshold[0].by_tag.care_or_education_placement.count",
+          "$.tests.duplicates.tiers.different_time.by_tag.care_or_education_placement.groups"
+        ],
+        "justification": "Signal outside_headline: the indicator is in the placement tag, [metric:$.tests.split_purchases.per_threshold[0].by_tag.care_or_education_placement.count] windows and [metric:$.tests.duplicates.tiers.different_time.by_tag.care_or_education_placement.groups] groups. Repeat finding: the direct payments audit [history:AO-12] gave a Limited Assurance opinion, so the likelihood is raised one point; recurring placement charges can be legitimate."
+      },
+      "impact": {
+        "score": 3,
+        "justification": "Medium on the council's scale [history:IS-03] (compliance): [rule:CPR-63] exempts individual placements from competition but requires a record of the reasons for the choice of provider; the case notes are not in the data."
+      },
+      "repeat_finding": {
+        "applies": true,
+        "history_ids": [
+          "AO-12"
+        ],
+        "note": "The direct payments audit covers the same theme and gave a Limited Assurance opinion."
+      },
+      "proposed_focus": "Recommend testing a sample of placement payments for the case-note record of reasons for the choice of provider.",
+      "sample_source": null
+    },
+    {
+      "id": "R-08",
+      "theme": "T08",
+      "statement": "Grant-tagged payments sit outside the general procurement headline: {{$.tests.off_contract.groups.unmatched.by_tag.grant.count}} grant suppliers at or above the quote threshold show no active notice found; the Rules treat a grant as a contract.",
+      "likelihood": {
+        "score": 2,
+        "signal": "outside_headline",
+        "signal_metrics": [
+          "$.tests.off_contract.groups.unmatched.by_tag.grant.count",
+          "$.tests.split_purchases.per_threshold[0].by_tag.grant.count"
+        ],
+        "justification": "Signal outside_headline: the grant tag shows [metric:$.tests.off_contract.groups.unmatched.by_tag.grant.count] suppliers with no active notice found and [metric:$.tests.split_purchases.per_threshold[0].by_tag.grant.count] repeated-payment windows; a grant may be properly outside competition, so this is a lead only."
+      },
+      "impact": {
+        "score": 2,
+        "justification": "Minor on the council's scale [history:IS-04] (compliance): the exposure of [metric:$.tests.split_purchases.per_threshold[0].by_tag.grant.gbp] in windows is small, and Minor cannot be told from Medium without the grant terms, so the lower level is taken."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend asking how grants are classified and approved, and testing a sample against the grant conditions.",
+      "sample_source": null
+    },
+    {
+      "id": "R-09",
+      "theme": "T09",
+      "statement": "Delegated approvals and Key Decision treatment cannot be observed in the payments data, and the printed clauses do not align on where the Key Decision applies.",
+      "likelihood": {
+        "score": 3,
+        "signal": "unobservable",
+        "signal_metrics": [],
+        "justification": "Signal unobservable: approvals are not in the payments data; the Key Decision paragraph [rule:CPR-04] makes every award over its stated value a Key Decision, while the Appendix A rows [rule:CPR-51] and [rule:CPR-52] attach Key Decision wording to a higher band only."
+      },
+      "impact": {
+        "score": 2,
+        "justification": "Minor on the council's scale [history:IS-04] (compliance): the disagreement between [rule:CPR-04] and [rule:CPR-52] is a clarity gap, and no flagged amount is tied to it."
+      },
+      "repeat_finding": null,
+      "proposed_focus": "Recommend asking the council which clause it applies and sampling large awards for the approval route used.",
+      "sample_source": null,
+      "auditor_override": {
+        "fields": [
+          "likelihood"
+        ],
+        "note": "Raise likelihood to 3: awards above £500,000 are rare but carry the highest stakes.",
+        "agent_rating": {
+          "likelihood": 2,
+          "impact": 2
+        }
+      }
+    }
+  ],
+  "excluded": [],
+  "revision": {
+    "number": 2,
+    "changes": []
+  }
+}

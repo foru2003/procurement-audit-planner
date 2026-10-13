@@ -1,0 +1,8 @@
+supplier_norm,match_class,candidate_notice_supplier,rule_fired,candidate_notice_ids,supplier,total,annualised_estimate,dominant_tag
+BAILEYS OF NEWBURY,near_contain,BAILEYS COACHES,distinctive sets equal,P00000342,BAILEYS OF NEWBURY,68206.35,272825.4,general_procurement
+D J TRAVEL,near_ratio,DJ TRAVEL,ratio=0.947,P00000342 Jan-Mar 2023,D J TRAVEL,67966.91,271867.64,general_procurement
+GLEN CLEANING COMPANY,near_contain,GLEN CLEANING,distinctive sets equal,IT-402-1488-P00001488 - AWARD,Glen Cleaning Company Ltd,92393.12,369572.48,general_procurement
+KENNET AND AVON GROUP,near_contain,KENNET AND AVON CARS,distinctive sets equal,P00000342,Kennet & Avon Group,11735.0,46940.0,general_procurement
+POTTINGERS HIRE SERVICE,near_ratio,POTTINGERS HIRE SERVICES,ratio=0.979,West Berkshire Council Transport Dynamic Purchasing System (DPS) Ongoing awards July-Sept 2025,POTTINGER'S HIRE SERVICE,9352.5,37410.0,general_procurement
+SDK ENVIRONMENTAL,near_ratio,SMS ENVIRONMENTAL,ratio=0.882,IT-402-1599-P00001599 - AWARD,SDK Environmental Ltd,3095.0,12380.0,general_procurement
+SWAN ADVOCACY,near_contain,SWAN ADVOCACY NETWORK,distinctive sets equal,IT-402-974-P00000974 - AWARD,Swan Advocacy,51216.0,204864.0,care_or_education_placement

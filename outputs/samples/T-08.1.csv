@@ -1,0 +1,13 @@
+test,item,group,row_id,source_file,sheet_row,pay_date,supplier,amount,service,narrative
+T-08.1,1,JUBILEE DAY NURSERY,Over500_2026_P03_-_published.xlsx:511,Over500_2026_P03_-_published.xlsx,511,2026-06-17,JUBILEE DAY NURSERY,400824.68,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,1,JUBILEE DAY NURSERY,Over500_2026_P03_-_published.xlsx:623,Over500_2026_P03_-_published.xlsx,623,2026-06-30,JUBILEE DAY NURSERY,6769.87,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,1,JUBILEE DAY NURSERY,Over500_2026_P04_-_published.xlsx:703,Over500_2026_P04_-_published.xlsx,703,2026-07-03,JUBILEE DAY NURSERY,1000.0,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,2,ACRES OF FUN DAY NURSERY AND PRE SCHOOL,Over500_2026_P03_-_published.xlsx:2075,Over500_2026_P03_-_published.xlsx,2075,2026-06-17,ACRES OF FUN DAY NURSERY AND PRE SCHOOL,323872.96,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,3,ROCKING HORSE DAY NURSERY NEWBURY RACECOURSE,Over500_2026_P03_-_published.xlsx:525,Over500_2026_P03_-_published.xlsx,525,2026-06-17,ROCKING HORSE DAY NURSERY - NEWBURY RACECOURSE PLC,317171.95,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,3,ROCKING HORSE DAY NURSERY NEWBURY RACECOURSE,Over500_2026_P03_-_published.xlsx:620,Over500_2026_P03_-_published.xlsx,620,2026-06-30,ROCKING HORSE DAY NURSERY - NEWBURY RACECOURSE PLC,3291.55,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,4,TIGERS DAY NURSERY,Over500_2026_P03_-_published.xlsx:579,Over500_2026_P03_-_published.xlsx,579,2026-06-17,TIGERS DAY NURSERY,240841.71,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,4,TIGERS DAY NURSERY,Over500_2026_P04_-_published.xlsx:704,Over500_2026_P04_-_published.xlsx,704,2026-07-03,TIGERS DAY NURSERY,1500.0,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,4,TIGERS DAY NURSERY,Over500_2026_P04_-_published.xlsx:578,Over500_2026_P04_-_published.xlsx,578,2026-07-03,TIGERS DAY NURSERY,1200.0,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,4,TIGERS DAY NURSERY,Over500_2026_P04_-_published.xlsx:3255,Over500_2026_P04_-_published.xlsx,3255,2026-07-02,TIGERS DAY NURSERY,797.54,Education (DSG Funded) & Other Education Grants,Other agencies
+T-08.1,5,TIGERS AT THEALE DAY NURSERY,Over500_2026_P03_-_published.xlsx:2081,Over500_2026_P03_-_published.xlsx,2081,2026-06-17,Tigers at Theale Day Nursery,240149.35,Education (DSG Funded) & Other Education Grants,Grants
+T-08.1,5,TIGERS AT THEALE DAY NURSERY,Over500_2026_P03_-_published.xlsx:634,Over500_2026_P03_-_published.xlsx,634,2026-06-30,Tigers at Theale Day Nursery,596.16,Education (DSG Funded) & Other Education Grants,Grants
