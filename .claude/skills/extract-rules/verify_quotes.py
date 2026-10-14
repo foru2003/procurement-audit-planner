@@ -30,6 +30,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
+import pdftext_cache  # noqa: E402
+
 # Document structure this verifier relies on (Contract Rules, Part 8). If the
 # council re-issues the PDF with different appendices, update these.
 APPENDIX_ROWS = {
@@ -85,6 +88,12 @@ def norm(s):
 
 class Pdf:
     def __init__(self, path):
+        self._text = None
+        if pdftext_cache.wanted():
+            self._text = pdftext_cache.load(path)
+            self.path, self.pages = str(path), self._text["pages"]
+            self._cache = {}
+            return
         for tool in ("pdftotext", "pdfinfo"):
             if not shutil.which(tool):
                 raise RuntimeError("%s not found on PATH (install poppler)" % tool)
@@ -97,6 +106,8 @@ class Pdf:
 
     def raw(self, page, layout=False):
         key = (page, layout)
+        if self._text is not None:
+            return self._text["layout" if layout else "plain"][page - 1]
         if key not in self._cache:
             cmd = ["pdftotext", "-enc", "UTF-8", "-f", str(page), "-l", str(page)]
             if layout:

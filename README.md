@@ -116,7 +116,7 @@ The guide at <https://procurement-audit-planner.vercel.app> has 5 lessons and 27
 - Skills: `extract-rules` and its `verify_quotes.py`; `risk-assessment` and its `build_register.py`
 - Agents: `findings-analyst`, `risk-assessor`, `challenger`, `qa-reviewer`
 - Scripts: `scripts/verify_history.py`, `scripts/signoff.py`, and the five QA scripts in `scripts/checks/`; `scripts/clean.py`, `analyse.py`, `common.py` and `selfcheck.py` were written by the `spend-analyst` agent when it ran
-- Configuration and outputs: `.claude/settings.json`, `requirements.txt`, and everything in `outputs/`
+- Configuration and outputs: `.claude/settings.json`, `requirements-analytics.txt`, and everything in `outputs/`
 
 *Copied as finished files (then adapted to this project)*
 
@@ -135,7 +135,7 @@ You need Windows, Python 3.9, Claude Code, and the poppler-style tools `pdftotex
 ```
 :: 1. Create the environment and install the two packages
 py -3.9 -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pip install -r requirements-analytics.txt
 
 :: 2. Put the public data in place (names as used here)
 ::    data\contract-rules.pdf   data\contracts.csv
@@ -160,7 +160,7 @@ Open the project folder in Claude Code, then work through the flow in `CLAUDE.md
 procurement-audit-planner/
   CLAUDE.md                  # full system spec and the lead procedure for the agent team
   README.md                  # this file
-  requirements.txt           # pandas, openpyxl
+  requirements-analytics.txt         # pandas, openpyxl
   .gitignore
   data/                      # public inputs, read-only
     contract-rules.pdf       #   Contract Procedure Rules (Part 8)

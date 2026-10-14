@@ -20,7 +20,7 @@ wrongdoing by the council, a department or a supplier.
 | Spend | `data/spend/*.xlsx` (or `*.csv`) | one workbook per period, sheet `Data to publish`, header row position varies |
 | Contracts (optional) | `data/contracts.csv` | Raw Contracts Finder export of awarded notices; may include other buyers. If absent, the notice-based tests are skipped and recorded |
 | Register (optional) | `data/contract-register.csv` | the council's own published contract register, if the auditor adds it |
-| Python | `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` | pandas + openpyxl (`requirements.txt`) |
+| Python | `.venv/Scripts/python.exe` (Windows) or `.venv/bin/python` | pandas + openpyxl (`requirements-analytics.txt`) |
 
 Data is read-only. Never edit anything under `data/`. Write scripts for
 Python 3.9 (the venv version): no `match` statements, no `X | Y` type hints.

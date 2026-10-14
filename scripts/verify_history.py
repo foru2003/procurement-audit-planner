@@ -33,6 +33,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pdftext_cache  # noqa: E402
+
 TOP = ["generated_on", "sources", "audit_opinions", "follow_ups",
        "advisory_work", "agreed_actions", "risk_themes", "scoring_method",
        "discrepancies", "gaps"]
@@ -100,14 +103,19 @@ class Committee:
     """The PDFs in a folder, with per-page normalised text."""
 
     def __init__(self, folder):
-        for tool in ("pdftotext", "pdfinfo"):
-            if not shutil.which(tool):
-                raise RuntimeError("%s not found on PATH (install poppler)" % tool)
         self.folder = Path(folder)
         self.files = sorted(p.name for p in self.folder.glob("*.pdf"))
         if not self.files:
             raise RuntimeError("no PDFs in %s" % folder)
         self.pages, self._cache = {}, {}
+        self.cached = pdftext_cache.wanted()
+        if self.cached:
+            self._text = {f: pdftext_cache.load(self.folder / f) for f in self.files}
+            self.pages = {f: t["pages"] for f, t in self._text.items()}
+            return
+        for tool in ("pdftotext", "pdfinfo"):
+            if not shutil.which(tool):
+                raise RuntimeError("%s not found on PATH (install poppler)" % tool)
         for f in self.files:
             m = re.search(r"^Pages:\s+(\d+)", run_tool(["pdfinfo", str(self.folder / f)]), re.M)
             if not m:
@@ -116,6 +124,9 @@ class Committee:
 
     def hay(self, f, page):
         key = (f, page)
+        if key not in self._cache and self.cached:
+            t = self._text[f]
+            self._cache[key] = [norm(t["plain"][page - 1]), norm(t["layout"][page - 1])]
         if key not in self._cache:
             texts = []
             for layout in (False, True):
