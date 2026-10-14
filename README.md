@@ -248,7 +248,7 @@ State lives in `st.session_state` and a temp folder per session. Streamlit Commu
 
 Replay needs no secrets and makes no model calls. In Replay the four QA checks, the gate check and the sign-off run for real against the replayed files. If a Live stage fails (bad key, no quota, rate limit that outlasts the retries, a cap reached, or a stage that does not produce its file) the app can switch to Replay automatically (sidebar option, on by default) and says why.
 
-**Spend analysis: which path ran.** The harness measured the analysis on this repo's three months of data: about 6 seconds and about 120 MB peak memory on a Windows laptop. Streamlit Community Cloud's memory limit is not confirmed here, so the analysis is treated as safe but guarded: when the model calls `clean` and `analyse`, they run for real; if either fails or times out (150 s), the precomputed Part A analytics are loaded instead and the agent is told so. The UI and the event log say which happened ("re-run live from the raw workbooks, N MB peak" or "precomputed Part A analytics, because ..."). Setting `SPEND_MODE = "precomputed"` forces the precomputed path. A live re-run gives the same counts and totals as Part A; the top-20 lists can differ in which equal-amount payments they show, because Part A's sort is not stable.
+**Spend analysis: which path ran.** The harness measured the analysis on this repo's three months of data: about 6 seconds and about 120 MB peak memory on a Windows laptop. Streamlit Community Cloud's memory limit is not confirmed here, so the analysis is treated as safe but guarded: when the model calls `clean` and `analyse`, they run for real; if either fails or times out (150 s), the precomputed Part A analytics are loaded instead and the agent is told so. The UI and the event log say which happened ("re-run live from the raw workbooks, N MB peak" or "precomputed Part A analytics, because ..."). Setting `SPEND_MODE = "precomputed"` forces the precomputed path.
 
 ### Model
 
@@ -282,9 +282,14 @@ Tests need no network or key:
 .venv\Scripts\python.exe tests/test_app_live.py     # passcode lock, connection test, fall back to Replay
 ```
 
-The scripted model does its work through the real tools and the real Part A scripts, so these tests exercise the whole pipeline, but they do not show how well a real Gemini model follows the prompts. That is what the Live run is for.
+The scripted model does its work through the real tools and the real Part A scripts, so these tests exercise the whole pipeline.
 
 **Status of Live mode with a real model:** _not yet run against Gemini; update this line after the first real run (calls used, stages completed, anything the model got wrong)._
+
+### Notes on results
+
+- **Live spend re-run versus Part A.** The live re-run of the spend analysis matches Part A's counts and totals. Its top-20 lists can pick different payments among equal amounts, because the Part A sort is not stable, so a Live run's top-20 rows (and the row ids that cite them) need not be identical to the Part A ones.
+- **What the tests do not measure.** The scripted-model tests do not measure how well Gemini follows the prompts. They check the harness (tools, scripts, gates, caps, fallback), not the model's judgement or instruction-following; only a real Live run does that.
 
 ### Deploying
 
