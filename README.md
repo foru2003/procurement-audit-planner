@@ -284,7 +284,12 @@ Tests need no network or key:
 
 The scripted model does its work through the real tools and the real Part A scripts, so these tests exercise the whole pipeline.
 
-**Status of Live mode with a real model:** _not yet run against Gemini; update this line after the first real run (calls used, stages completed, anything the model got wrong)._
+**Status of Live mode with a real model:** the first full Live run (`tests/live_run.py`, `gemini-3.8-flash`, free tier, 2026-10-14) did **not** complete. It stopped in stage 1 (extract-rules) after 16 model requests and about 13 minutes, when Google returned a quota error (HTTP 429, "You exceeded your current quota") that outlasted three 90-second backoff retries; five 429s occurred, starting at the tenth request. Stages 2 to 7 were not reached, so the number of requests for a full run, the slowest stage overall and the behaviour of the other agents are still unmeasured. What the partial run did show:
+
+- The model followed the tool protocol: it read all 15 PDF pages in three batched turns and made no tool-call errors.
+- It did not meet the extract-rules goal. It wrote `outputs/rules.json` three times, and `verify_quotes.py` rejected each version: the files held 1, 2 and 1 rules (Part A: 64) with 138 to 158 coverage errors. It saw the verifier output and rewrote a near-empty file instead of extending it.
+- Each request resends the whole conversation, so by the tenth request it carried all 15 pages; the free-tier limit that was hit looks like a token limit, but the error did not name which metric.
+- The estimate of about 86 requests for a full run, and the caps set from it, are therefore unverified. A full Live run on the free tier may not fit in the quota, in which case Replay is the reliable mode.
 
 ### Notes on results
 
