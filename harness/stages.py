@@ -65,6 +65,7 @@ class Run:
         self.status = {sid: "todo" for sid in STAGE_IDS}
         self.reports = {}
         self.turns = 0
+        self.turn_log = []
         self.fallback_reason = ""
 
     # ---- plumbing ----------------------------------------------------
@@ -88,8 +89,12 @@ class Run:
         tools = tb.tools_for(spec.tools, write_paths=spec.writes, sender=name, members=agents.MEMBERS)
         self.emit("agent", "%s starts" % name, name)
         self.llm.emit = lambda kind, text, _n=name: self.emit(kind, text, _n)
+        t0, used0 = time.time(), self.budget.used if self.budget else 0
         res = self.llm.run_agent(agents.system_prompt(name), task, tools, max_steps=spec.max_steps, label=name)
         self.emit("agent", "%s done after %d model request(s)%s" % (name, res.steps, " (step limit reached)" if res.truncated else ""), name)
+        self.turn_log.append({"agent": name, "seconds": round(time.time() - t0, 1), "steps": res.steps, "truncated": res.truncated,
+                              "calls": (self.budget.used - used0) if self.budget else None,
+                              "model": getattr(self.llm, "model", ""), "final_text": (res.text or "")[:400]})
         return res
 
     def _run_script(self, args):

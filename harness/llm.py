@@ -135,6 +135,7 @@ class LLM:
                     reply = {"result": out}
                 except Exception as exc:  # tool errors go back to the model
                     reply = {"error": "%s: %s" % (type(exc).__name__, exc)}
+                    self.emit("tool_error", "%s: %s" % (c.name, reply["error"][:200]))
                 replies.append(types.Part.from_function_response(name=c.name, response=reply))
             contents.append(types.Content(role="user", parts=replies))
         return AgentResult(text, max_steps, truncated=True)

@@ -55,6 +55,7 @@ class Toolbox:
     def __init__(self, ws: Workspace, team_log=None):
         self.ws = ws
         self.team_log = team_log if team_log is not None else []
+        self.failures = []
         self.spend = {"path": None, "secs": 0.0, "peak_mb": None, "reason": ""}
 
     # ---- run_builder -------------------------------------------------
@@ -72,9 +73,11 @@ class Toolbox:
         args = [str(a) for a in (args or [])]
         for a in args:
             self._check_arg(name, a, flags)
-        if name in SPEND_SCRIPTS:
-            return self._run_spend(name, script, args)
-        return self._exec(name, script, args, adds_dirs)
+        res = self._run_spend(name, script, args) if name in SPEND_SCRIPTS else self._exec(name, script, args, adds_dirs)
+        if res.get("exit_code") != 0:
+            self.failures.append({"builder": name, "args": args, "exit_code": res.get("exit_code"),
+                                  "tail": (res.get("output") or res.get("error") or "")[-300:]})
+        return res
 
     def _exec(self, name, script, args, adds_dirs):
         cmd = [sys.executable, str(ROOT / script)]
