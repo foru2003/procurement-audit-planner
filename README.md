@@ -116,7 +116,7 @@ The guide at <https://procurement-audit-planner.vercel.app> has 5 lessons and 27
 - Skills: `extract-rules` and its `verify_quotes.py`; `risk-assessment` and its `build_register.py`
 - Agents: `findings-analyst`, `risk-assessor`, `challenger`, `qa-reviewer`
 - Scripts: `scripts/verify_history.py`, `scripts/signoff.py`, and the five QA scripts in `scripts/checks/`; `scripts/clean.py`, `analyse.py`, `common.py` and `selfcheck.py` were written by the `spend-analyst` agent when it ran
-- Configuration and outputs: `.claude/settings.json`, `requirements-analytics.txt`, and everything in `outputs/`
+- Configuration and outputs: `.claude/settings.json`, `requirements.txt`, and everything in `outputs/`
 
 *Copied as finished files (then adapted to this project)*
 
@@ -135,7 +135,7 @@ You need Windows, Python 3.9, Claude Code, and the poppler-style tools `pdftotex
 ```
 :: 1. Create the environment and install the two packages
 py -3.9 -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements-analytics.txt
+.venv\Scripts\python.exe -m pip install -r requirements.txt
 
 :: 2. Put the public data in place (names as used here)
 ::    data\contract-rules.pdf   data\contracts.csv
@@ -160,7 +160,7 @@ Open the project folder in Claude Code, then work through the flow in `CLAUDE.md
 procurement-audit-planner/
   CLAUDE.md                  # full system spec and the lead procedure for the agent team
   README.md                  # this file
-  requirements-analytics.txt         # pandas, openpyxl
+  requirements.txt         # pandas, openpyxl
   .gitignore
   data/                      # public inputs, read-only
     contract-rules.pdf       #   Contract Procedure Rules (Part 8)
@@ -189,3 +189,103 @@ procurement-audit-planner/
     audit-plan.json, planning-memo.md, risk-control-matrix.md, audit-program.md
     samples/, pack-figures.json, challenges.md, review.md
 ```
+
+## 10. Part B: the Streamlit harness
+
+Part A ran inside Claude Code. Part B turns the same skills, agents and scripts into a web app, `app.py`, that anyone can walk through from a browser: Streamlit Community Cloud hosts it, and Gemini (free tier) powers its Live mode.
+
+**Deployed URL:** _not deployed yet; add it here after deploying (see "Deploying" below)._
+
+### Architecture
+
+```
+app.py                       Streamlit UI: stepper, Gate 1 and Gate 2 forms, previews, downloads
+harness/
+  llm.py                     the ONLY module that imports google-genai: tool-calling loop,
+                             429 backoff, model fallback, one-call connection test
+  agents.py                  loads .claude/agents/*.md and .claude/skills/*/SKILL.md as the prompts
+  tools.py                   read_file, read_pdf_page, query_csv, write_output, run_builder, send_message
+  stages.py                  the workflow (Live and Replay), the gates, the team protocol
+  workspace.py               per-session temp folder (data/ copy + outputs/)
+  caps.py                    per-session and daily call caps
+  config.py                  st.secrets / environment settings
+scripts/, .claude/skills/    the Part A Python, called as subprocesses, unchanged in behaviour
+data/pdf-text/               pdftotext output per page, bundled (see "PDF text" below)
+outputs/                     the Part A results: what Replay walks through
+tests/                       headless tests (scripted model, no network)
+```
+
+State lives in `st.session_state` and a temp folder per session. Streamlit Community Cloud has no persistent disk, so every download is built from that folder during the session.
+
+### How Part A maps onto the harness
+
+| Part A | In the harness |
+| --- | --- |
+| `/extract-rules` skill, run by hand | Stage 1. An agent turn that follows the skill, then `verify_quotes.py` runs on the result |
+| `spend-analyst` sub-agent | Stage 2, see the note below |
+| `findings-analyst` sub-agent | Stage 3. Reads PDF pages through `read_pdf_page`; `verify_history.py` runs on `history.json` |
+| `risk-assessor` + `risk-assessment` skill | Stage 4. `build_register.py` runs through `run_builder` |
+| Human gate (`auditor-comments.md`) | Gate 1 form: Approve / Amend / Reject per risk, written into `auditor-comments.md` in the format the builders read |
+| Risk-assessor re-run applying the decisions | If every risk is Approved, the harness writes the mechanical revision block and re-runs `build_register.py` itself (no model call). If any risk is Amended or Rejected, the risk-assessor runs again to apply exactly those decisions |
+| Agent team (`planner`, `challenger`, `qa-reviewer`) | Stage 6. Each teammate is an agent turn; they exchange messages through `send_message`, with `PACK READY`, `CHALLENGE`, `QA vN` and `DONE` as in the Part A prompts. At most two challenger rounds, then a closing turn |
+| `signoff.py report` and `record` | Run by the harness; Gate 2 form calls `record` with the name typed in (never invented) |
+| Prompts | `.claude/agents/*.md` and `SKILL.md` are loaded as written, with a short harness note that maps Claude Code tools (Bash, Read, Write, pdftotext, SendMessage) onto the harness tools |
+
+**The spend-analyst does not write its own code in Part B.** In Part A it wrote `clean.py` and `analyse.py`. On a public web app an agent that can run arbitrary Python is a hole, so the harness gives it `run_builder`, which runs only an allowlist of the existing scripts (`clean`, `analyse`, `verify_quotes`, `verify_history`, `build_register`, `build_pack`, `run_checks`, `signoff_report`) with checked arguments, plus read-only file and CSV tools that can write nowhere but the one output file each agent owns. The analytics are therefore the same code that produced the Part A numbers, and the agent only runs it and interprets the result.
+
+### Live and Replay
+
+| Stage | Live | Replay |
+| --- | --- | --- |
+| 1 Extract rules | model + `verify_quotes.py` | Part A `rules.json` |
+| 2 Spend analysis | model runs the scripts (see below) | Part A analytics |
+| 3 Audit history | model + `verify_history.py` | Part A `history.json` |
+| 4 Risk register | model + `build_register.py` | Part A register |
+| Gate 1 | your decisions are applied | form shown; the recorded Part A decisions are used |
+| 6 Agent team | three agents, up to two challenger rounds | the Part A conversation rebuilt from `challenges.md` and `review.md` |
+| Gate 2 | real `signoff.py record` | real `signoff.py record` |
+| Downloads | zip of the session's outputs | same |
+
+Replay needs no secrets and makes no model calls. In Replay the four QA checks, the gate check and the sign-off run for real against the replayed files. If a Live stage fails (bad key, no quota, rate limit that outlasts the retries, a cap reached, or a stage that does not produce its file) the app can switch to Replay automatically (sidebar option, on by default) and says why.
+
+**Spend analysis: which path ran.** The harness measured the analysis on this repo's three months of data: about 6 seconds and about 120 MB peak memory on a Windows laptop. Streamlit Community Cloud's memory limit is not confirmed here, so the analysis is treated as safe but guarded: when the model calls `clean` and `analyse`, they run for real; if either fails or times out (150 s), the precomputed Part A analytics are loaded instead and the agent is told so. The UI and the event log say which happened ("re-run live from the raw workbooks, N MB peak" or "precomputed Part A analytics, because ..."). Setting `SPEND_MODE = "precomputed"` forces the precomputed path. A live re-run gives the same counts and totals as Part A; the top-20 lists can differ in which equal-amount payments they show, because Part A's sort is not stable.
+
+### Model
+
+Live mode uses **`gemini-3.8-flash`** by default (from `MODEL_NAME`), through the `google-genai` SDK with manual tool calling. At the time of writing Google's documentation lists it as stable, supporting function calling, and free of charge on the Gemini API free tier. Google does not publish the per-model free-tier request limits in those docs; check them in AI Studio. If the model is not found or has no free quota, the app moves along `MODEL_FALLBACKS` (default `gemini-3.6-flash`, `gemini-3.5-flash-lite`, `gemini-2.5-flash`). Free-tier models vary between runs, so Live results will not match Part A exactly.
+
+### Caps and rate limits
+
+A "call" is one request sent to the model; a tool loop of N steps costs N calls, and a retried request counts again. A full Live run is estimated at about 86 calls (rules 12, spend 8, history 12, risk register 10, team 44; an all-Approve Gate 1 costs none, an Amend or Reject adds about 8). These are estimates until measured on a real run. The per-session cap is `SESSION_CALL_CAP` (default 130, about 1.5 times the estimate) and the daily cap across all visitors is `DAILY_CALL_CAP` (default 300), kept in memory so it resets when the app restarts. The sidebar shows calls used and remaining for both. 429 errors are retried with exponential backoff (honouring the server's retry hint), with `TURN_PAUSE_SECONDS` (default 4) between agent turns. Live mode and the connection test need `APP_PASSCODE`.
+
+### PDF text
+
+`poppler-utils` in `packages.txt` gives the app `pdftotext`. The page text is also precomputed into `data/pdf-text/` (`scripts/precompute_pdf_text.py`), which the `read_pdf_page` tool reads and which the quote verifiers use automatically if `pdftotext` is missing. Both routes give identical verifier results (checked with `PDF_TEXT_CACHE=0` and `=1`).
+
+### Secrets
+
+Copy `.streamlit/secrets.toml.example` to `.streamlit/secrets.toml` for local runs; on Streamlit Community Cloud paste the same keys into App settings, Secrets. Keys: `GOOGLE_API_KEY`, `MODEL_NAME`, `APP_PASSCODE` (plus optional `MODEL_FALLBACKS`, `SESSION_CALL_CAP`, `DAILY_CALL_CAP`, `TURN_PAUSE_SECONDS`, `SPEND_MODE`). `.streamlit/secrets.toml` and `.env*` are git-ignored. The key is read in one place and removed from any message shown in the UI.
+
+### Running and testing locally
+
+```
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Tests need no network or key:
+
+```
+.venv\Scripts\python.exe tests/test_app_replay.py   # Replay end to end through the UI
+.venv\Scripts\python.exe tests/test_live_flow.py    # Live orchestration with a scripted model, caps, errors
+.venv\Scripts\python.exe tests/test_app_live.py     # passcode lock, connection test, fall back to Replay
+```
+
+The scripted model does its work through the real tools and the real Part A scripts, so these tests exercise the whole pipeline, but they do not show how well a real Gemini model follows the prompts. That is what the Live run is for.
+
+**Status of Live mode with a real model:** _not yet run against Gemini; update this line after the first real run (calls used, stages completed, anything the model got wrong)._
+
+### Deploying
+
+Main file `app.py`; Python from the platform default; `requirements.txt` and `packages.txt` at the repo root; secrets pasted in App settings. See the deploy checklist given with this change.

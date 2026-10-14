@@ -1,16 +1,11 @@
 .venv/
 __pycache__/
 .claude/settings.local.json
-node_modules
 
-# Next.js / Node
-node_modules/
-.next/
-next-env.d.ts
-*.tsbuildinfo
-.vercel/
-
-# Secrets: never commit; only the template is tracked
+# Secrets: never commit real values
+.streamlit/secrets.toml
 .env
 .env.*
-!.env.example
+
+# Per-session scratch
+.session-tmp/

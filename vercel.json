@@ -1,8 +1,0 @@
-{
-  "functions": {
-    "api/probe.py": {
-      "maxDuration": 60,
-      "includeFiles": "{data/pdf-text/**,.claude/skills/**,.claude/agents/**,outputs/rules.json,scripts/pdftext_cache.py}"
-    }
-  }
-}
