@@ -2,6 +2,8 @@
 
 An agent system, built with Claude Code skills, sub-agents, a human gate and an agent team, that plans an internal audit of procurement for **West Berkshire Council** from its public data.
 
+**Live app: <https://procurement-audit-planner.streamlit.app/>** (Part B, a Streamlit harness over this system; see section 10).
+
 ## 1. Overview
 
 The system turns the council's Contract Procedure Rules (Part 8) into 64 testable rules, analyses every payment in three monthly "Expenditure over £500" workbooks against them, folds in the council's past audit opinions and its own risk-scoring method, and rates nine risks on the council's 5x5 matrix. A human auditor approves, amends or rejects each risk; an agent team then turns the approved risks into a planning memo, a risk-control matrix and an audit program with a targeted sample, and the auditor signs the pack off. Python computes every number and checks every citation; the language model reads, judges and writes.
@@ -194,7 +196,7 @@ procurement-audit-planner/
 
 Part A ran inside Claude Code. Part B turns the same skills, agents and scripts into a web app, `app.py`, that anyone can walk through from a browser: Streamlit Community Cloud hosts it, and Gemini (free tier) powers its Live mode.
 
-**Deployed URL:** _not deployed yet; add it here after deploying (see "Deploying" below)._
+**Live app:** <https://procurement-audit-planner.streamlit.app/> (Streamlit Community Cloud). Replay mode works for anyone with no key; Live mode needs the passcode.
 
 ### Architecture
 
@@ -298,4 +300,4 @@ The scripted model does its work through the real tools and the real Part A scri
 
 ### Deploying
 
-Main file `app.py`; Python from the platform default; `requirements.txt` and `packages.txt` at the repo root; secrets pasted in App settings. See the deploy checklist given with this change.
+The app is deployed at <https://procurement-audit-planner.streamlit.app/> from the `part-b-harness` branch. Settings: main file `app.py`; Python from the platform default; `requirements.txt` and `packages.txt` at the repo root; secrets (see "Secrets") pasted in App settings, Secrets. To redeploy, push to the deployed branch and the platform rebuilds. Because the daily call cap is kept in memory, it resets whenever the app restarts or goes back to sleep.
